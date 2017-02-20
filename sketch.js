@@ -1,27 +1,30 @@
 var grid = []
 var n = 0;
+gw = 1;
 
 function setup() {
-	createCanvas(400, 400);
+	createCanvas(1000, 1000);
 	
-	frameRate(1);
+	frameRate(150);
 	
-	for (var x = 0; x * 10 < height; x ++) {
+	for (var x = 0; x * gw < width; x ++) {
 		grid[x] = [];
 	}
-	for (var x = 0; x * 10 < width; x ++) {
-		for (var y = 0; y * 10 < height; y ++) {
-			grid[x][y] = new Grid(10 * x + 10, 10 * y + 10, "white", "black", true);
+	for (var x = 0; x * gw < width; x ++) {
+		for (var y = 0; y * gw < height; y ++) {
+			grid[x][y] = new Grid(gw * x + gw, gw * y + gw, "white", "black", true);
 		}
 	}
-	grid[width / 20][height / 20].col = "red";
+	grid[width / (2 * gw)][height / (2 * gw)].col = "red";
 }
 
 function draw() {
   for (var x = 0; x < grid.length; x ++) {
   	for (var y = 0; y < grid[x].length; y ++) {
   		if (grid[x][y].cont) {
-  			if (grid[x][y].col === "red") {
+  			if (grid[x][y].col === "red" && grid[x][y].shade === "black") {
+  				grid[x][y].cont = "close";
+  				
   				if (grid[x - 1][y].col != "blue" && grid[x - 1][y].shade != "blue") {
   					grid[x - 1][y].col = "blue";
   					grid[x - 1][y].cont = false;
@@ -37,7 +40,9 @@ function draw() {
   					grid[x + 1][y].shade = "blue";
   					grid[x + 1][y].cont = false;
   				}
-  			} else if (grid[x][y].col === "blue") {
+  			} else if (grid[x][y].col === "blue" && grid[x][y].shade === "black") {
+  				grid[x][y].cont = "close";
+  				
   				if (grid[x][y - 1].col != "red" && grid[x][y - 1].shade != "red") {
   					grid[x][y - 1].col = "red";
   					grid[x][y - 1].cont = false;
@@ -62,7 +67,11 @@ function draw() {
   	for (var y = 0; y < grid[x].length; y ++) {
   		if (grid[x][y].col === "blue" || grid[x][y].col === "red") {
   			grid[x][y].show();
-  			grid[x][y].cont = true;
+  			if (grid[x][y].cont === "close") {
+  				grid[x][y].cont = false;
+  			} else {
+  				grid[x][y].cont = true;
+  			}
   		}
   	}
   }

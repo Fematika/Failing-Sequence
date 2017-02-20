@@ -27,6 +27,6 @@ function Grid(x, y, col, shade, cont) {
 				fill(255);
 				break;
 		}
-		rect(this.x, this.y, 10, 10);
+		rect(this.x, this.y, gw, gw);
 	}
 }
